@@ -8,6 +8,12 @@
 
 ![SaaS Link field settings.](resources/field-settings.png)
 
+Relate to...
+
+- Capsule People, Organizations, and Opportunities
+- Harvest Clients and Projects
+- Trello Boards
+
 ## Field Example
 
 ![SaaS Link field example. It doesn't blur your control panel.](resources/field.png)
