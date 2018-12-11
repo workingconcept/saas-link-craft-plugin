@@ -1,0 +1,60 @@
+{
+    "name": "workingconcept/saas-link",
+    "description": "Simple Craft Field Type to link Entries to records in Harvest, Capsule and Trello.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "craft3",
+        "trello",
+        "capsule",
+        "harvest"
+    ],
+    "support": {
+        "docs": "https://github.com/workingconcept/saas-link-craft-plugin/blob/master/readme.md",
+        "issues": "https://github.com/workingconcept/saas-link-craft-plugin/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Working Concept",
+            "homepage": "https://workingconcept.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0.0",
+        "craftcms/cms": "^3.0.0",
+        "ext-json": "*"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "workingconcept\\saaslink\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "SaaS Link",
+        "handle": "saas-link",
+        "schemaVersion": "1.0.0",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://github.com/workingconcept/saas-link-craft-plugin/blob/master/changelog.md",
+        "components": {
+            "harvestService": "workingconcept\\saaslink\\services\\HarvestService",
+            "trelloService": "workingconcept\\saaslink\\services\\TrelloService",
+            "capsuleService": "workingconcept\\saaslink\\services\\CapsuleService"
+        },
+        "class": "workingconcept\\saaslink\\SaasLink",
+        "downloadUrl": "https://github.com/workingconcept/saas-link-craft-plugin/archive/master.zip",
+        "developer": "Working Concept",
+        "developerUrl": "https://workingconcept.com"
+    }
+}

@@ -1,0 +1,72 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField( {
+    first: true,
+    label:        'Harvest Token' | translate('saas-link'),
+    id:           'harvestToken',
+    required:     true,
+    name:         'harvestToken',
+    value:        settings.harvestToken,
+    placeholder:  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    autofocus:    true,
+    errors:       settings.getErrors('harvestToken'),
+    instructions: 'Create a [personal access token](https://id.getharvest.com/developers) and plop it right here.' | translate('saas-link')
+} ) }}
+
+{{ forms.textField( {
+    label:        'Harvest Account ID' | translate('saas-link'),
+    id:           'harvestAccountId',
+    required:     false,
+    name:         'harvestAccountId',
+    value:        settings.harvestAccountId,
+    placeholder:  '555555',
+    errors:       settings.getErrors('harvestAccountId'),
+    instructions: 'Add the relevant account ID.' | translate('saas-link')
+} ) }}
+
+
+{{ forms.textField( {
+    first: true,
+    label:        'Trello API Token' | translate('saas-link'),
+    id:           'trelloApiToken',
+    required:     false,
+    name:         'trelloApiToken',
+    value:        settings.trelloApiToken,
+    placeholder:  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    errors:       settings.getErrors('trelloApiToken'),
+    instructions: '' | translate('saas-link')
+} ) }}
+
+{{ forms.textField( {
+    label:        'Trello API Key' | translate('saas-link'),
+    id:           'trelloApiKey',
+    required:     false,
+    name:         'trelloApiKey',
+    value:        settings.trelloApiKey,
+    placeholder:  '555555',
+    errors:       settings.getErrors('trelloApiKey'),
+    instructions: '' | translate('saas-link')
+} ) }}
+
+{{ forms.textField( {
+    label:        'Trello Organization ID' | translate('saas-link'),
+    id:           'trelloOrganizationId',
+    required:     false,
+    name:         'trelloOrganizationId',
+    value:        settings.trelloOrganizationId,
+    placeholder:  '555555',
+    errors:       settings.getErrors('trelloOrganizationId'),
+    instructions: '' | translate('saas-link')
+} ) }}
+
+{{ forms.textField( {
+    first: true,
+    label:        'Capsule Personal Access Token' | translate('capsule'),
+    id:           'capsuleToken',
+    required:     false,
+    name:         'capsuleToken',
+    value:        settings.capsuleToken,
+    placeholder:  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    errors:       settings.getErrors('capsuleToken'),
+    instructions: 'You can create these from the Personal Access Tokens tab of the My Preferences > API Authentication Tokens page in your Capsule account.' | translate('saas-link')
+} ) }}
