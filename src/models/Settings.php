@@ -144,7 +144,7 @@ class Settings extends Model
     public function getEnabledServices()
     {
         $enabled = [];
-        
+
         foreach (self::SUPPORTED_SERVICES as $service)
         {
             $instance = new $service;

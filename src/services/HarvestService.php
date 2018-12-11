@@ -125,7 +125,7 @@ class HarvestService extends SaasLinkService
         {
             $projects = $this->getProjects();
 
-            foreach ($projects->projects as $project)
+            foreach ($projects as $project)
             {
                 $options[] = [
                     'label'   => $project->name . ' (' . $project->client->name . ')',
