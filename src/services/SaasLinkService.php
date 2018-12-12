@@ -8,7 +8,6 @@
 
 namespace workingconcept\saaslink\services;
 
-
 class SaasLinkService extends \craft\base\Component
 {
     // Properties
@@ -73,7 +72,7 @@ class SaasLinkService extends \craft\base\Component
      *
      * @return boolean
      */
-    public function isConfigured()
+    public function isConfigured(): bool
     {
         return false;
     }
@@ -96,7 +95,7 @@ class SaasLinkService extends \craft\base\Component
      *
      * @return array
      */
-    public function getAvailableRelationshipTypes()
+    public function getAvailableRelationshipTypes(): array
     {
         return [];
     }
@@ -105,12 +104,12 @@ class SaasLinkService extends \craft\base\Component
     /**
      * Get an array of label+value options that represent instances of whatever
      * relationshipType object was chosen. (Things to link to.)
-     * 
+     *
      * @param string $relationshipType
      *
      * @return array
      */
-    public function getOptions($relationshipType)
+    public function getOptions($relationshipType): array
     {
         return [];
     }

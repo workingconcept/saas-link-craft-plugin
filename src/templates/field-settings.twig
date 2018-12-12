@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("workingconcept\\saaslink\\assetbundles\\saaslink\\SaasLinkCpAsset") %}
+{% do view.registerAssetBundle("workingconcept\\saaslink\\assetbundles\\saaslink\\SaasLinkCpFieldSettingsAsset") %}
 
 {# @formatter:off #}
 {% set extraJs %}
@@ -14,7 +14,7 @@
 
 {% js extraJs %}
 
-{{ forms.selectField( {
+{{ forms.selectField({
     label:        'Service' | translate('saas-link'),
     id:           'service',
     required:     true,
@@ -23,9 +23,9 @@
     options:      field.getAvailableServices(),
     errors:       field.getErrors('service'),
     instructions: "Select the configured service to which you'd like to point this field." | translate('saas-link')
-} ) }}
+}) }}
 
-{{ forms.selectField( {
+{{ forms.selectField({
     label:        'Relationship Type' | translate('saas-link'),
     id:           'relationshipType',
     required:     true,
@@ -34,4 +34,4 @@
     options:      field.getAvailableRelationshipTypes(),
     errors:       field.getErrors('relationshipType'),
     instructions: "Select the type of record that you'd like to link to." | translate('saas-link')
-} ) }}
+}) }}

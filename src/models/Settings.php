@@ -27,7 +27,7 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * @var array List of services that have been configured.
+     * @var array Services that are configured and ready to use.
      */
     public $enabledServices = [];
 
@@ -44,7 +44,7 @@ class Settings extends Model
     /**
      * @var string Harvest's customer base URL. (Will be grabbed+populated automatically.)
      */
-    private $_harvestBaseUrl = '';
+    public $harvestBaseUrl = '';
 
     /**
      * @var string
@@ -67,130 +67,51 @@ class Settings extends Model
     public $capsuleToken = '';
 
     /**
-     * @var string
+     * @var string Capsule's customer base URL. (Will be grabbed+populated automatically.)
      */
-    private $_capsuleBaseUrl = '';
+    public $capsuleBaseUrl = '';
 
     /**
      * @var string
      */
     public $fetchRelationshipTypesUri = 'saas-link/default/fetch-relationship-types';
 
+    /**
+     * @var string
+     */
+    public $fetchTrelloOrganizationOptionsUri = 'saas-link/default/fetch-trello-organization-options';
+
 
     // Public Methods
     // =========================================================================
-
-    /**
-     * Get the base URL for Capsule. Fetch it first if we don't already have it.
-     * @return string
-     */
-    public function getCapsuleBaseUrl()
-    {
-        if (empty($this->_capsuleBaseUrl))
-        {
-            $this->updateBaseUrl('capsule');
-        }
-
-        return $this->_capsuleBaseUrl;
-    }
-
-    /**
-     * Set the Capsule base URL.
-     * @return string
-     */
-    public function setCapsuleBaseUrl($url)
-    {
-        return $this->_capsuleBaseUrl = $url;
-    }
-
-    /**
-     * Get the base URL for Harvest. Fetch it first if we don't already have it.
-     * @return string
-     */
-    public function getHarvestBaseUrl()
-    {
-        if (empty($this->_harvestBaseUrl))
-        {
-            $this->updateBaseUrl('harvest');
-        }
-
-        return $this->_harvestBaseUrl;
-    }
-
-    /**
-     * Set the Harvest base URL.
-     * @return string
-     */
-    public function setHarvestBaseUrl($url)
-    {
-        return $this->_harvestBaseUrl = $url;
-    }
 
     /**
      * Get an array with the class names of services this plugin supports.
      *
      * @return array
      */
-    public function getSupportedServices()
+    public function getSupportedServices(): array
     {
         return self::SUPPORTED_SERVICES;
     }
 
     /**
-     * Get an array of service instances that are configured and ready to poke at.
-     *
-     * @return array
-     */
-    public function getEnabledServices()
-    {
-        $enabled = [];
-
-        foreach (self::SUPPORTED_SERVICES as $service)
-        {
-            $instance = new $service;
-
-            if ($instance->isConfigured())
-            {
-                $enabled[] = $instance;
-            }
-        }
-
-        return $enabled;
-    }
-
-    /**
      * @inheritdoc
      */
-     public function rules()
-     {
-         return [
-             [['harvestToken', 'harvestAccountId', 'trelloApiKey', 'trelloApiToken', 'trelloOrganizationId', 'capsuleToken'], 'string'],
-         ];
-     }
-
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * Fetch the base URL for the provided service so we don't have to store it as another plugin setting.
-     *
-     * @param string $service The slugified name of the relevant service.
-     */
-    private function updateBaseUrl($service)
+    public function rules(): array
     {
-        if ($service === 'harvest')
-        {
-            $this->setHarvestBaseUrl(
-                SaasLink::$plugin->harvest->getCompany()->base_uri
-            );
-        }
-        elseif ($service === 'capsule')
-        {
-            $this->setCapsuleBaseUrl(
-                SaasLink::$plugin->capsule->getSite()->url
-            );
-        }
+        return [
+            [[
+                'harvestToken',
+                'harvestAccountId',
+                'trelloApiKey',
+                'trelloApiToken',
+                'trelloOrganizationId',
+                'capsuleToken',
+                'harvestBaseUrl',
+                'capsuleBaseUrl',
+            ], 'string'],
+        ];
     }
 
 }

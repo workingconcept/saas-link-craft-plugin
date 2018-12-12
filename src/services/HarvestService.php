@@ -23,8 +23,8 @@ class HarvestService extends SaasLinkService
     // Constants
     // =========================================================================
 
-    const CACHE_ENABLED = false;
-    const CACHE_SECONDS = 15;
+    const CACHE_ENABLED = true;
+    const CACHE_SECONDS = 60;
     const TIME_ROUNDING_METHOD = 'nextHalfHour'; // nextHalfHour, nearestHalfHour, nextWholeNumber, nearestWholeNumber
 
 
@@ -58,7 +58,7 @@ class HarvestService extends SaasLinkService
     /**
      * @inheritdoc
      */
-    public function isConfigured()
+    public function isConfigured(): bool
     {
         return ! empty($this->settings->harvestToken) && ! empty($this->settings->harvestAccountId);
     }
@@ -73,17 +73,33 @@ class HarvestService extends SaasLinkService
             'headers' => [
                 'Authorization'      => 'Bearer ' . $this->settings->harvestToken,
                 'Harvest-Account-Id' => $this->settings->harvestAccountId,
-                'User-Agent'         => 'Craft CMS (https://workingconcept.com)',
+                'User-Agent'         => 'Craft CMS',
             ],
             'verify' => false,
             'debug' => false
         ]);
+
+        if (empty($this->settings->harvestBaseUrl))
+        {
+            $this->setHarvestBaseUrlSetting();
+        }
+    }
+
+    /**
+     * Save a reference to the customer-facing base Harvest URL so we don't have to keep looking it up.
+     */
+    public function setHarvestBaseUrlSetting()
+    {
+        $this->settings->harvestBaseUrl = $this->getCompany()->base_uri;
+
+        // let the base plugin class worry about *saving* the settings model
+        // Craft::$app->plugins->savePluginSettings(SaasLink::$plugin, $this->settings->toArray());
     }
 
     /**
      * @inheritdoc
      */
-    public function getAvailableRelationshipTypes()
+    public function getAvailableRelationshipTypes(): array
     {
         return [
             [
@@ -100,7 +116,7 @@ class HarvestService extends SaasLinkService
     /**
      * @inheritdoc
      */
-    public function getOptions($relationshipType)
+    public function getOptions($relationshipType): array
     {
         $options = [];
 
@@ -130,10 +146,10 @@ class HarvestService extends SaasLinkService
                 $options[] = [
                     'label'   => $project->name . ' (' . $project->client->name . ')',
                     'value'   => (string)$project->id,
-                    'link'    => SaasLink::$plugin->settings->harvestBaseUrl . '/projects/' . $project->id,
+                    'link'    => $this->settings->harvestBaseUrl . '/projects/' . $project->id,
                     'default' => null
                 ];
-            }    
+            }
         }
 
         return $options;
@@ -143,25 +159,30 @@ class HarvestService extends SaasLinkService
      * Get company information
      * https://help.getharvest.com/api-v2/company-api/company/company/
      *
-     * @return void
+     * @return HarvestCompany
      */
-    public function getCompany()
+    public function getCompany(): HarvestCompany
     {
-        $response  = $this->client->get('company');
+        if ($cachedResponse = Craft::$app->cache->get('harvest_company'))
+        {
+            return new HarvestCompany($cachedResponse);
+        }
+
+        $response = $this->client->get('company');
         $responseData = json_decode($response->getBody(true));
 
-        $company = new HarvestCompany($responseData);
+        Craft::$app->cache->set('harvest_company', $responseData, 3600);
 
-        return $company;
+        return new HarvestCompany($responseData);
     }
 
     /**
      * Get client list.
      * https://help.getharvest.com/api-v2/clients-api/clients/clients/
-     * 
+     *
      * @return array HarvestClient models
      */
-    public function getClients()
+    public function getClients(): array
     {
         $clients = [];
         $result  = $this->collectPaginatedResults('clients');
@@ -177,10 +198,10 @@ class HarvestService extends SaasLinkService
     /**
      * Get project list.
      * https://help.getharvest.com/api-v2/projects-api/projects/projects/
-     * 
+     *
      * @return array HarvestProject models
      */
-    public function getProjects()
+    public function getProjects(): array
     {
         $projects = [];
         $result   = $this->collectPaginatedResults('projects');
@@ -196,10 +217,10 @@ class HarvestService extends SaasLinkService
     /**
      * Get user list.
      * https://help.getharvest.com/api-v2/users-api/users/users/
-     * 
+     *
      * @return array HarvestUser models
      */
-    public function getUsers()
+    public function getUsers(): array
     {
         $users  = [];
         $result = $this->collectPaginatedResults('users');
@@ -208,7 +229,7 @@ class HarvestService extends SaasLinkService
         {
             $users[] = new HarvestUser($userData);
         }
-        
+
         return $users;
     }
 
@@ -217,10 +238,10 @@ class HarvestService extends SaasLinkService
      * https://help.getharvest.com/api-v2/projects-api/projects/projects/#retrieve-a-project
      *
      * @param  int $projectId  ID of relevant Harvest project
-     * 
+     *
      * @return HarvestProject
      */
-    public function getProject($projectId)
+    public function getProject($projectId): HarvestProject
     {
         if ( ! $this->project || $this->project->id !== $projectId)
         {
@@ -240,14 +261,14 @@ class HarvestService extends SaasLinkService
      *
      * @param  int     $clientId  ID of relevant Harvest client
      * @param  boolean $active    whether to retrieve projects that are active
-     * 
+     *
      * @return array HarvestProject models
      */
-    public function getClientProjects($clientId, $active)
+    public function getClientProjects($clientId, $active): array
     {
         $projects = [];
-        $result   = $this->collectPaginatedResults('projects?client_id=' 
-            . $clientId 
+        $result   = $this->collectPaginatedResults('projects?client_id='
+            . $clientId
             . '&is_active=' . ($active ? 'true' : 'false')
         );
 
@@ -265,10 +286,10 @@ class HarvestService extends SaasLinkService
      * https://help.getharvest.com/api-v2/timesheets-api/timesheets/time-entries/
      *
      * @param  int   $projectId  ID of relevant Harvest project
-     * 
+     *
      * @return array HarvestTimeEntry models
      */
-    public function getProjectTimeEntries($projectId)
+    public function getProjectTimeEntries($projectId): array
     {
         $entries = [];
         $result  = $this->collectPaginatedResults('time_entries?project_id=' . $projectId);
@@ -287,10 +308,10 @@ class HarvestService extends SaasLinkService
      * https://help.getharvest.com/api-v2/timesheets-api/timesheets/time-entries/
      *
      * @param  int   $userId  ID of relevant Harvest user
-     * 
+     *
      * @return array HarvestTimeEntry models
      */
-    public function getUserTimeEntries($userId)
+    public function getUserTimeEntries($userId): array
     {
         $entries = [];
         $result  = $this->collectPaginatedResults('time_entries?user_id=' . $userId);
@@ -309,10 +330,10 @@ class HarvestService extends SaasLinkService
      * https://help.getharvest.com/api-v2/expenses-api/expenses/expenses/
      *
      * @param  int   $projectId  ID of relevant Harvest project
-     * 
+     *
      * @return array HarvestExpense models
      */
-    public function getProjectExpenses($projectId)
+    public function getProjectExpenses($projectId): array
     {
         $expenses = [];
         $result   = $this->collectPaginatedResults('expenses?project_id=' . $projectId);
@@ -330,10 +351,10 @@ class HarvestService extends SaasLinkService
      * https://help.getharvest.com/api-v2/invoices-api/invoices/invoices/
      *
      * @param  int   $projectId  ID of relevant Harvest project
-     * 
+     *
      * @return array             API response with Invoice objects
      */
-    public function getProjectInvoices($projectId)
+    public function getProjectInvoices($projectId): array
     {
         $invoices = [];
         $result   = $this->collectPaginatedResults('invoices?project_id=' . $projectId);
@@ -352,10 +373,10 @@ class HarvestService extends SaasLinkService
      * @param int     $projectId            ID of relevant Harvest project
      * @param boolean $billableOnly         only count billable hours (default true)
      * @param boolean $individuallyRounded  round time to nearest half hour before adding to the total (default true)
-     * 
+     *
      * @return float
      */
-    public function getTotalProjectHours($projectId, $billableOnly = false, $individuallyRounded = true)
+    public function getTotalProjectHours($projectId, $billableOnly = false, $individuallyRounded = true): float
     {
         $timeEntries       = $this->getProjectTimeEntries($projectId);
         $totalRoundedHours = 0;
@@ -378,7 +399,7 @@ class HarvestService extends SaasLinkService
                 {
                     $hoursByPerson[$timeEntry->user->name] += $timeEntry->hours;
                 }
-                 
+
                 //echo "$timeEntry->hours // {$timeEntry->user->name} on $timeEntry->spent_date\n";
             }
         }
@@ -399,10 +420,10 @@ class HarvestService extends SaasLinkService
      * @param DateTime $startDate  beginning of date range
      * @param DateTime $endDate    end of date range
      * @param bool     $billable   whether to return billable or non-billable hours
-     * 
+     *
      * @return float
      */
-    public function getTotalUserHoursInRange($userId, $startDate, $endDate, $billable, $roundTime = false)
+    public function getTotalUserHoursInRange($userId, $startDate, $endDate, $billable, $roundTime = false): float
     {
         $from  = $startDate->format('Y-m-d');
         $to    = $endDate->format('Y-m-d');
@@ -434,10 +455,10 @@ class HarvestService extends SaasLinkService
      * Calculate and return the grand total for all invoices on a given project.
      *
      * @param int $projectId  ID of relevant Harvest project
-     * 
+     *
      * @return float
      */
-    public function getTotalProjectInvoiced($projectId)
+    public function getTotalProjectInvoiced($projectId): float
     {
         $invoices  = $this->getProjectInvoices($projectId);
         $total     = 0;
@@ -460,10 +481,10 @@ class HarvestService extends SaasLinkService
      * @param boolean $includeExpenses  include billable project expenses?
      * @param boolean $includeTime      include logged billable time?
      * @param boolean $roundTime        round logged time before adding to the total?
-     * 
+     *
      * @return float
      */
-    public function getTotalProjectUninvoiced($projectId, $includeExpenses = true, $includeTime = true, $roundTime = true)
+    public function getTotalProjectUninvoiced($projectId, $includeExpenses = true, $includeTime = true, $roundTime = true): float
     {
         $total = 0;
 
@@ -512,10 +533,10 @@ class HarvestService extends SaasLinkService
      * @param boolean $includeExpenses Calculate expenses toward total cost.
      * @param boolean $includeTime     Calculate logged time toward total cost.
      * @param boolean $roundTime       Round time when calculating its cost.
-     * 
+     *
      * @return float
      */
-    public function getTotalProjectCosts($projectId, $includeExpenses = true, $includeTime = true, $roundTime = false)
+    public function getTotalProjectCosts($projectId, $includeExpenses = true, $includeTime = true, $roundTime = false): float
     {
         $total                = 0;
         $billableExpensesOnly = true;
@@ -571,10 +592,10 @@ class HarvestService extends SaasLinkService
      *
      * @param string $endpoint  API endpoint to be queried, which can include URL parameters but *not* `page=`
      * @param string $property  optional property that contains result object array (defaults to cleaned endpoint name)
-     * 
+     *
      * @return array
      */
-    private function collectPaginatedResults($endpoint, $property = '')
+    private function collectPaginatedResults($endpoint, $property = ''): array
     {
         $cacheKey = 'harvest_' . $endpoint;
 
@@ -638,10 +659,10 @@ class HarvestService extends SaasLinkService
      * @param float  $hours
      * @param string $method 'nextHalfHour', 'nearestHalfHour', 'nextWholeNumber', or 'nearestWholeNumber'
      *                       missing or invalid option will skip rounding
-     * 
+     *
      * @return float
      */
-    private function roundTime($hours, $method = '')
+    private function roundTime($hours, $method = ''): float
     {
         if ($method === 'nextHalfHour')
         {

@@ -26,7 +26,7 @@ class DefaultController extends Controller
         $request = Craft::$app->getRequest();
         $serviceName = $request->getBodyParam('selectedService');
 
-        foreach (SaasLink::$plugin->getSettings()->getEnabledServices() as $service)
+        foreach (SaasLink::$plugin->getEnabledServices() as $service)
         {
             if ($serviceName === $service->serviceSlug)
             {
@@ -35,6 +35,32 @@ class DefaultController extends Controller
         }
 
         return $this->asJson([]);
+    }
+
+    public function actionFetchTrelloOrganizationOptions(): Response
+    {
+        $this->requirePostRequest();
+
+        $options = [];
+        $request = Craft::$app->getRequest();
+        $trelloKey = $request->getBodyParam('trelloKey');
+        $trelloToken = $request->getBodyParam('trelloToken');
+
+        SaasLink::$plugin->getSettings()->trelloApiKey = $trelloKey;
+        SaasLink::$plugin->getSettings()->trelloApiToken = $trelloToken;
+        SaasLink::$plugin->getSettings()->trelloOrganizationId = '¯\_(ツ)_/¯';
+
+        $organizations = SaasLink::$plugin->trello->getMemberOrganizations();
+
+        foreach ($organizations as $organization)
+        {
+            $options[] = [
+                'label' => $organization->displayName,
+                'value' => $organization->id,
+            ];
+        }
+
+        return $this->asJson($options);
     }
 
 }

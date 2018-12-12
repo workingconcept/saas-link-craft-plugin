@@ -13,7 +13,7 @@ namespace workingconcept\saaslink\assetbundles\saaslink;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
-class SaasLinkCpAsset extends AssetBundle
+class SaasLinkCpSettingsAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -30,7 +30,7 @@ class SaasLinkCpAsset extends AssetBundle
         ];
 
         $this->js = [
-            'js/saas-link-field.js',
+            'js/saas-link-settings.js',
         ];
 
         $this->css = [];

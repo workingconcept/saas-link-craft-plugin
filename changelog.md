@@ -1,5 +1,14 @@
 # Saas Link Changelog
 
-## 1.0.0 - 2018-12-11
+## 1.0.1 - 2018-12-11
+### Changed
+- Fixed performance issues caused by too much API interaction.
+- Improved plugin settings so one needn't embark on a bewildering journey to find his or her Trello Organization ID. (It's a dropdown now.)
+- Added plugin settings field instructions.
+- Tidied up a bit, added type hints, etc.
+### Removed
+- Got rid of half-baked translations before anybody noticed.
+
+## 1.0.0 - 2018-12-10
 ### Added
-- Initial release
+- Initial release.

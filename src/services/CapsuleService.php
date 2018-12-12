@@ -19,8 +19,8 @@ class CapsuleService extends SaasLinkService
     // Constants
     // =========================================================================
 
-    const CACHE_ENABLED = false;
-    const CACHE_SECONDS = 15;
+    const CACHE_ENABLED = true;
+    const CACHE_SECONDS = 60;
 
 
     // Properties
@@ -48,7 +48,7 @@ class CapsuleService extends SaasLinkService
     /**
      * @inheritdoc
      */
-    public function isConfigured()
+    public function isConfigured(): bool
     {
         return ! empty($this->settings->capsuleToken);
     }
@@ -68,12 +68,28 @@ class CapsuleService extends SaasLinkService
             'verify' => false,
             'debug' => false
         ]);
+
+        if (empty($this->settings->capsuleBaseUrl))
+        {
+            $this->setCapsuleBaseUrlSetting();
+        }
+    }
+
+    /**
+     * Save a reference to the customer-facing base Capsule URL so we don't have to keep looking it up.
+     */
+    public function setCapsuleBaseUrlSetting()
+    {
+        $this->settings->capsuleBaseUrl = $this->getSite()->url;
+
+        // let the base plugin class worry about *saving* the settings model
+        // Craft::$app->plugins->savePluginSettings(SaasLink::$plugin, $this->settings->toArray());
     }
 
     /**
      * @inheritdoc
      */
-    public function getAvailableRelationshipTypes()
+    public function getAvailableRelationshipTypes(): array
     {
         return [
             [
@@ -94,7 +110,7 @@ class CapsuleService extends SaasLinkService
     /**
      * @inheritdoc
      */
-    public function getOptions($relationshipType)
+    public function getOptions($relationshipType): array
     {
         $options = [];
 
@@ -119,7 +135,7 @@ class CapsuleService extends SaasLinkService
                 $options[] = [
                     'label'   => $label,
                     'value'   => (string)$opportunity->id,
-                    'link'    => SaasLink::$plugin->settings->capsuleBaseUrl . '/opportunity/' . $opportunity->id,
+                    'link'    => $this->settings->capsuleBaseUrl . '/opportunity/' . $opportunity->id,
                     'default' => null
                 ];
             }
@@ -131,7 +147,7 @@ class CapsuleService extends SaasLinkService
                 $options[] = [
                     'label'   => $organization->name,
                     'value'   => (string)$organization->id,
-                    'link'    => SaasLink::$plugin->settings->capsuleBaseUrl . '/party/' . $organization->id,
+                    'link'    => $this->settings->capsuleBaseUrl . '/party/' . $organization->id,
                     'default' => null
                 ];
             }
@@ -139,7 +155,7 @@ class CapsuleService extends SaasLinkService
             // alphabetize
             usort($options, function($a, $b) {
                 return strtolower($a['label']) <=> strtolower($b['label']);
-            });    
+            });
         }
         elseif ($relationshipType === 'person')
         {
@@ -148,7 +164,7 @@ class CapsuleService extends SaasLinkService
                 $options[] = [
                     'label'   => $person->firstName . ' ' . $person->lastName,
                     'value'   => (string)$person->id,
-                    'link'    => SaasLink::$plugin->settings->capsuleBaseUrl . '/party/' . $person->id,
+                    'link'    => $this->settings->capsuleBaseUrl . '/party/' . $person->id,
                     'default' => null
                 ];
             }
@@ -167,7 +183,7 @@ class CapsuleService extends SaasLinkService
      *
      * @return CapsuleParty[]
      */
-    public function getParties()
+    public function getParties(): array
     {
         $parties = [];
         $result  = $this->collectPaginatedResults('parties');
@@ -183,9 +199,9 @@ class CapsuleService extends SaasLinkService
     /**
      * Get available Capsule humans.
      *
-     * @return mixed
+     * @return CapsuleParty[]
      */
-    public function getPeople()
+    public function getPeople(): array
     {
         $people = [];
 
@@ -203,9 +219,9 @@ class CapsuleService extends SaasLinkService
     /**
      * Get available Capsule organizations.
      *
-     * @return mixed
+     * @return CapsuleParty[]
      */
-    public function getOrganizations()
+    public function getOrganizations(): array
     {
         $organizations = [];
 
@@ -223,12 +239,12 @@ class CapsuleService extends SaasLinkService
     /**
      * Get available Capsule opportunities.
      *
-     * @return mixed
+     * @return CapsuleOpportunity[]
      */
-    public function getOpportunities()
+    public function getOpportunities(): array
     {
         $opportunities = [];
-        $result  = $this->collectPaginatedResults('opportunities');
+        $result = $this->collectPaginatedResults('opportunities');
 
         foreach ($result as $opportunityData)
         {
@@ -241,7 +257,7 @@ class CapsuleService extends SaasLinkService
     /**
      * Get Capsule site details.
      *
-     * @return mixed
+     * @return object
      */
     public function getSite()
     {

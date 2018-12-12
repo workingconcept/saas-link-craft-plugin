@@ -23,6 +23,7 @@ class SaasLinkField extends BaseOptionsField
     public $service;
     public $relationshipType;
 
+    private $defaultService;
 
     // Static Methods
     // =========================================================================
@@ -39,6 +40,9 @@ class SaasLinkField extends BaseOptionsField
     // Public Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -47,36 +51,22 @@ class SaasLinkField extends BaseOptionsField
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getContentColumnType(): string
     {
         return Schema::TYPE_STRING;
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    public function init()
-    {
-        parent::init();
-
-        // start with an empty item
-        $this->options = array_merge([
-                [
-                    'label'   => '',
-                    'value'   => '',
-                    'link'    => null,
-                    'default' => null
-                ]
-            ],
-            $this->getOptions()
-        );
-    }
-
-    public function getAvailableServices()
+    public function getAvailableServices(): array
     {
         $options = [];
 
-        foreach (SaasLink::$plugin->getSettings()->getEnabledServices() as $service) 
+        foreach (SaasLink::$plugin->getEnabledServices() as $service)
         {
             $options[] = [
                 'label' => $service->serviceName,
@@ -87,18 +77,29 @@ class SaasLinkField extends BaseOptionsField
         return $options;
     }
 
-    public function getAvailableRelationshipTypes()
+    /**
+     * @return array
+     */
+    public function getAvailableRelationshipTypes(): array
     {
         if ($serviceInstance = $this->getServiceInstance())
         {
             return $serviceInstance->getAvailableRelationshipTypes();
         }
 
+        // pass the first set of options if this is a new field without a Service
+        if (isset($this->defaultService))
+        {
+            return $this->defaultService->getAvailableRelationshipTypes();
+        }
+
         return [];
     }
 
-
-    public function getOptions()
+    /**
+     * @return array
+     */
+    public function fetchOptions()
     {
         if ($serviceInstance = $this->getServiceInstance())
         {
@@ -107,7 +108,6 @@ class SaasLinkField extends BaseOptionsField
 
         return [];
     }
-
 
     /**
      * @inheritdoc
@@ -120,27 +120,37 @@ class SaasLinkField extends BaseOptionsField
             $value = $this->defaultValue();
         }
 
+        $options = $this->fetchOptions();
+
+        // add an empty first item
+        array_unshift($options, [
+                'label'   => '',
+                'value'   => '',
+                'link'    => null,
+                'default' => null,
+        ]);
+
         return Craft::$app->getView()->renderTemplate('saas-link/select',
             [
                 'name'       => $this->handle,
                 'value'      => $value,
                 'optionLink' => $this->getLinkFromValue($value),
-                'options'    => $this->options,
+                'options'    => $options,
             ]);
     }
-
 
     /**
      * Get a convenient URL for the selected record to show next to the selection.
      *
      * @param string $value Stored field value.
-     * @return void
+     *
+     * @return string|null
      */
     public function getLinkFromValue($value)
     {
         if ( ! empty($value))
         {
-            $compareValue = isset($value->value) ? $value->value : $value;
+            $compareValue = $value->value ?? $value;
 
             foreach	($this->options as $option)
             {
@@ -182,17 +192,24 @@ class SaasLinkField extends BaseOptionsField
     }
 
 
+    // Private Methods
+    // =========================================================================
+
     private function getServiceInstance()
     {
-        foreach (SaasLink::$plugin->getSettings()->getEnabledServices() as $service)
+        foreach (SaasLink::$plugin->getEnabledServices() as $service)
         {
+            if ( ! isset($this->defaultService))
+            {
+                // default to the first one in case we don't get a match (new field)
+                $this->defaultService = $service;
+            }
+
             if ($this->service === $service->serviceSlug)
             {
                 return $service;
             }
         }
-
-        return;
     }
 
     // Protected Methods

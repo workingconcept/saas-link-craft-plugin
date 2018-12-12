@@ -8,7 +8,10 @@
 const serviceField = document.getElementById('types-workingconcept-saaslink-fields-SaasLinkField-service'),
     relationshipTypeField = document.getElementById('types-workingconcept-saaslink-fields-SaasLinkField-relationshipType');
 
-serviceField.addEventListener('change', event => {
+serviceField.addEventListener('change', updateRelationshipTypeOptions);
+
+function updateRelationshipTypeOptions(event) {
+    console.log('called');
     const selectedService = serviceField.querySelector('option:checked') ? serviceField.querySelector('option:checked').value : false;
     const selectedRelationshipType = relationshipTypeField.querySelector('option:checked') ? relationshipTypeField.querySelector('option:checked').value : false;
 
@@ -38,5 +41,4 @@ serviceField.addEventListener('change', event => {
             }
         }
     );
-
-});
+}

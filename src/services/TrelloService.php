@@ -9,11 +9,19 @@
 namespace workingconcept\saaslink\services;
 
 use workingconcept\saaslink\models\trello\TrelloBoard;
+use workingconcept\saaslink\models\trello\TrelloOrganization;
 use workingconcept\saaslink\SaasLink;
 use Craft;
 
 class TrelloService extends SaasLinkService
 {
+    // Constants
+    // =========================================================================
+
+    const CACHE_ENABLED = true;
+    const CACHE_SECONDS = 60;
+
+
     // Properties
     // =========================================================================
 
@@ -39,13 +47,12 @@ class TrelloService extends SaasLinkService
     /**
      * @inheritdoc
      */
-    public function isConfigured()
+    public function isConfigured(): bool
     {
         return ! empty($this->settings->trelloApiKey) && 
             ! empty($this->settings->trelloApiToken) && 
             ! empty($this->settings->trelloOrganizationId);
     }
-
 
     /**
      * @inheritdoc
@@ -64,11 +71,10 @@ class TrelloService extends SaasLinkService
         ]);
     }
 
-
     /**
      * @inheritdoc
      */
-    public function getAvailableRelationshipTypes()
+    public function getAvailableRelationshipTypes(): array
     {
         return [
             [
@@ -78,11 +84,10 @@ class TrelloService extends SaasLinkService
         ];
     }
 
-
     /**
      * @inheritdoc
      */
-    public function getOptions($relationshipType)
+    public function getOptions($relationshipType): array
     {
         $options = [];
 
@@ -109,10 +114,6 @@ class TrelloService extends SaasLinkService
         return $options;
     }
 
-
-    // Private Methods
-    // =========================================================================
-
     /**
      * Get boards.
      *
@@ -122,21 +123,30 @@ class TrelloService extends SaasLinkService
      * @return TrelloBoard[]
      */
 
-    public function getBoards($filter = 'all', $fields = 'all')
+    public function getBoards($filter = 'all', $fields = 'all'): array
     {
-        // TODO: handle pagination
         $boards = [];
+        $cacheKey = 'trello_boards_' . $filter . $fields;
 
-        if ($cachedResponse = Craft::$app->cache->get('trello_boards'))
+        if (self::CACHE_ENABLED && $cachedResponse = Craft::$app->cache->get($cacheKey))
         {
             $responseData = $cachedResponse;
         }
         else
         {
-            $response     = $this->client->get('organizations/' . $this->settings->trelloOrganizationId . '/boards');
-            $responseData = json_decode($response->getBody(true));
+            $response = $this->client->get(sprintf(
+                'organizations/%s/boards?filter=%s&fields=%s',
+                $this->settings->trelloOrganizationId,
+                $filter,
+                $fields
+            ));
 
-            Craft::$app->cache->set('trello_boards', $responseData, 3600);
+            $responseData = json_decode($response->getBody());
+
+            if (self::CACHE_ENABLED)
+            {
+                Craft::$app->cache->set($cacheKey, $responseData, self::CACHE_SECONDS);
+            }
         }
 
         foreach ($responseData as $responseItem)
@@ -146,5 +156,34 @@ class TrelloService extends SaasLinkService
 
         return $boards;
     }
+
+
+    /**
+     * Get Organizations to which the relevant human (per API credentials) belongs.
+     *
+     * @return TrelloOrganization[]
+     */
+    public function getMemberOrganizations(): array
+    {
+        $organizations = [];
+
+        // be extra sure we've got credentials since this is called during plugin setup when Settings aren't populated
+        if ($this->isConfigured())
+        {
+            $response = $this->client->get('members/me/organizations');
+            $responseData = json_decode($response->getBody());
+
+            foreach ($responseData as $responseItem)
+            {
+                $organizations[] = new TrelloOrganization($responseItem);
+            }
+        }
+
+        return $organizations;
+    }
+
+
+    // Private Methods
+    // =========================================================================
 
 }

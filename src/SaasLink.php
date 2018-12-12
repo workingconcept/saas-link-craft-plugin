@@ -14,6 +14,8 @@ use workingconcept\saaslink\services\HarvestService;
 use workingconcept\saaslink\services\CapsuleService;
 use workingconcept\saaslink\services\TrelloService;
 use workingconcept\saaslink\variables\HarvestVariable;
+use workingconcept\saaslink\variables\TrelloVariable;
+use workingconcept\saaslink\variables\CapsuleVariable;
 use workingconcept\saaslink\models\Settings;
 use workingconcept\saaslink\fields\SaasLinkField;
 
@@ -51,9 +53,9 @@ class SaasLink extends craft\base\Plugin
     public $hasCpSettings = true;
 
     /**
-     * @var bool
+     * @var string
      */
-    public $hasCpSection = false;
+    public $schemaVersion = '1.0.1';
 
     /**
      * @var string
@@ -109,6 +111,65 @@ class SaasLink extends craft\base\Plugin
         );
     }
 
+    /**
+     * Get an array of configured and enabled services.
+     *
+     * @return array
+     */
+    public function getEnabledServices(): array
+    {
+        $enabled = [];
+
+        foreach ($this->settings->enabledServices as $service)
+        {
+            $instance = new $service;
+
+            if ($instance->isConfigured())
+            {
+                $enabled[] = $instance;
+            }
+        }
+
+        return $enabled;
+    }
+
+    /**
+     * Fetch and save base account URLs if they're not already set.
+     *
+     * @return bool
+     */
+    public function beforeSaveSettings(): bool
+    {
+        $enabled = [];
+
+        foreach (Settings::SUPPORTED_SERVICES as $service)
+        {
+            $instance = new $service;
+
+            if ($instance->isConfigured())
+            {
+                $enabled[] = $service;
+            }
+        }
+
+        $this->settings->enabledServices = $enabled;
+
+        if ($this->capsule->isConfigured() && empty($this->settings->capsuleBaseUrl))
+        {
+            // have the service update the URL so we can save it
+            $this->capsule->setCapsuleBaseUrlSetting();
+        }
+
+        if ($this->harvest->isConfigured() && empty($this->settings->harvestBaseUrl))
+        {
+            // have the service update the URL so we can save it
+            $this->harvest->setHarvestBaseUrlSetting();
+        }
+
+        return true;
+    }
+
+
     // Protected Methods
     // =========================================================================
 
@@ -125,9 +186,20 @@ class SaasLink extends craft\base\Plugin
      */
     protected function settingsHtml(): string
     {
+        $organizationOptions = [];
+
+        foreach($this->trello->getMemberOrganizations() as $organization)
+        {
+            $organizationOptions[] = [
+                'label' => $organization->displayName,
+                'value' => $organization->id,
+            ];
+        }
+
         return Craft::$app->view->renderTemplate(
             'saas-link/settings',
             [
+                'organizationOptions' => $organizationOptions,
                 'settings' => $this->getSettings()
             ]
         );
