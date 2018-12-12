@@ -1,6 +1,6 @@
 ![SaaS Link](resources/hero.svg)
 
-<h1 align="center">SaaS Link Plugin Craft CMS 3 Plugin</h1>
+<h1 align="center">SaaS Link Craft CMS 3 Plugin</h1>
 
 <h4 align="center">A Field Type for saving convenient links to stuff in <a href="https://capsulecrm.com/">Capsule</a>, <a href="https://www.getharvest.com/">Harvest</a>, and <a href="https://trello.com">Trello</a>.</h4>
 
