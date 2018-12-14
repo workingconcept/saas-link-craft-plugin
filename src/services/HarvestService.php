@@ -169,7 +169,7 @@ class HarvestService extends SaasLinkService
         }
 
         $response = $this->client->get('company');
-        $responseData = json_decode($response->getBody(true));
+        $responseData = json_decode($response->getBody(), true);
 
         Craft::$app->cache->set('harvest_company', $responseData, 3600);
 
@@ -246,7 +246,7 @@ class HarvestService extends SaasLinkService
         if ( ! $this->project || $this->project->id !== $projectId)
         {
             $response     = $this->client->get('projects/' . $projectId);
-            $responseData = json_decode($response->getBody(true));
+            $responseData = json_decode($response->getBody(), true);
             $project      = new HarvestProject($responseData->project);
 
             $this->project = $project;
@@ -631,7 +631,7 @@ class HarvestService extends SaasLinkService
         while ( ! $fetchedAllRecords)
         {
             $response = $this->client->get($endpoint . $page);
-            $responseData = json_decode($response->getBody(true));
+            $responseData = json_decode($response->getBody(), false);
 
             $records = array_merge($records, $responseData->{$property});
 
