@@ -320,7 +320,7 @@ class CapsuleService extends SaasLinkService
 
             if ($response->hasHeader('Link'))
             {
-                $parsed = Psr7\parse_header($response->getHeader('Link'));
+                $parsed = /** @scrutinizer ignore-call */ Psr7\parse_header($response->getHeader('Link'));
 
                 if ( ! empty($parsed[0]['rel']) && $parsed[0]['rel'] === 'next')
                 {
