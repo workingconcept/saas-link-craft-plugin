@@ -21,7 +21,7 @@ class HarvestUser extends Model
     // =========================================================================
 
     /**
-     * @var integer Unique ID for the user.
+     * @var int Unique ID for the user.
      */
     public $id;
 
@@ -91,19 +91,19 @@ class HarvestUser extends Model
     public $is_active;
     
     /**
-     * @var integer The number of hours per week this person is available to work in seconds, 
+     * @var int The number of hours per week this person is available to work in seconds,
      *              in half hour increments. For example, if a person’s capacity is 35 hours, 
      *              the API will return 126000 seconds.
      */
     public $weekly_capacity;
     
     /**
-     * @var decimal The billable rate to use for this user when they are added to a project.
+     * @var float The billable rate to use for this user when they are added to a project.
      */
     public $default_hourly_rate;
     
     /**
-     * @var decimal The cost rate to use for this user when calculating a project’s costs vs billable amount.
+     * @var float The cost rate to use for this user when calculating a project’s costs vs billable amount.
      */
     public $cost_rate;
     
@@ -118,12 +118,12 @@ class HarvestUser extends Model
     public $avatar_url;
     
     /**
-     * @var datetime Date and time the user was created.
+     * @var string Date and time the user was created.
      */
     public $created_at;
     
     /**
-     * @var datetime Date and time the user was last updated.
+     * @var string Date and time the user was last updated.
      */
     public $updated_at;
 
@@ -137,7 +137,7 @@ class HarvestUser extends Model
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->first_name . ' ' . $this->last_name;
     }
@@ -145,7 +145,7 @@ class HarvestUser extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [[

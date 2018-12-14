@@ -21,7 +21,7 @@ class HarvestInvoiceLineItem extends Model
     // =========================================================================
 
     /**
-     * @var integer Unique ID for the line item.
+     * @var int Unique ID for the line item.
      */
     public $id;
 
@@ -41,34 +41,33 @@ class HarvestInvoiceLineItem extends Model
     public $description;
 
     /**
-     * @var integer The unit quantity of the item.
+     * @var int The unit quantity of the item.
      */
     public $quantity;
 
     /**
-     * @var decimal The individual price per unit.
+     * @var float The individual price per unit.
      */
     public $unit_price;
 
     /**
-     * @var decimal The line item subtotal (quantity * unit_price).
+     * @var float The line item subtotal (quantity * unit_price).
      */
     public $amount;
 
     /**
-     * @var boolean Whether the invoice’s tax percentage applies to this line item.
+     * @var bool Whether the invoice’s tax percentage applies to this line item.
      */
     public $taxed;
 
     /**
-     * @var boolean Whether the invoice’s tax2 percentage applies to this line item.
+     * @var bool Whether the invoice’s tax2 percentage applies to this line item.
      */
     public $taxed2;
 
 
     // Public Methods
     // =========================================================================
-
     
     public function getProject()
     {
@@ -77,10 +76,13 @@ class HarvestInvoiceLineItem extends Model
 
     public function setProject($project)
     {
-        return $this->project = $project;
+        return $this->_project = $project;
     }
-    
-    public function rules()
+
+    /**
+     * @inheritdoc
+     */
+    public function rules(): array
     {
         return [
             [[

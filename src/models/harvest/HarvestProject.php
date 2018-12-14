@@ -21,7 +21,7 @@ class HarvestProject extends Model
     // =========================================================================
 
     /**
-     * @var integer Unique ID for the project.
+     * @var int Unique ID for the project.
      */
     public $id;
 
@@ -41,17 +41,17 @@ class HarvestProject extends Model
     public $code;
 
     /**
-     * @var boolean Whether the project is active or archived.
+     * @var bool Whether the project is active or archived.
      */
     public $is_active;
 
     /**
-     * @var boolean Whether the project is billable or not.
+     * @var bool Whether the project is billable or not.
      */
     public $is_billable;
 
     /**
-     * @var boolean Whether the project is a fixed-fee project or not.
+     * @var bool Whether the project is a fixed-fee project or not.
      */
     public $is_fixed_fee;
 
@@ -61,12 +61,12 @@ class HarvestProject extends Model
     public $bill_by;
 
     /**
-     * @var decimal Rate for projects billed by Project Hourly Rate.
+     * @var float Rate for projects billed by Project Hourly Rate.
      */
     public $hourly_rate;
 
     /**
-     * @var decimal The budget in hours for the project when budgeting by time.
+     * @var float The budget in hours for the project when budgeting by time.
      */
     public $budget;
 
@@ -76,22 +76,22 @@ class HarvestProject extends Model
     public $budget_by;
 
     /**
-     * @var boolean Option to have the budget reset every month.
+     * @var bool Option to have the budget reset every month.
      */
     public $budget_is_monthly;
 
     /**
-     * @var boolean Whether project managers should be notified when the project goes over budget.
+     * @var bool Whether project managers should be notified when the project goes over budget.
      */
     public $notify_when_over_budget;
 
     /**
-     * @var decimal Percentage value used to trigger over budget email alerts.
+     * @var float Percentage value used to trigger over budget email alerts.
      */
     public $over_budget_notification_percentage;
 
     /**
-     * @var date Date of last over budget notification. If none have been sent, this will be null.
+     * @var string Date of last over budget notification. If none have been sent, this will be null.
      */
     public $over_budget_notification_date;
 
@@ -101,7 +101,7 @@ class HarvestProject extends Model
     public $show_budget_to_all;
 
     /**
-     * @var decimal The monetary budget for the project when budgeting by money.
+     * @var float The monetary budget for the project when budgeting by money.
      */
     public $cost_budget;
 
@@ -111,7 +111,7 @@ class HarvestProject extends Model
     public $cost_budget_include_expenses;
 
     /**
-     * @var decimal The amount you plan to invoice for the project. Only used by fixed-fee projects.
+     * @var float The amount you plan to invoice for the project. Only used by fixed-fee projects.
      */
     public $fee;
 
@@ -121,22 +121,22 @@ class HarvestProject extends Model
     public $notes;
 
     /**
-     * @var date Date the project was started.
+     * @var string Date the project was started.
      */
     public $starts_on;
 
     /**
-     * @var date Date the project will end.
+     * @var string Date the project will end.
      */
     public $ends_on;
 
     /**
-     * @var datetime Date and time the project was created.
+     * @var string Date and time the project was created.
      */
     public $created_at;
 
     /**
-     * @var datetime Date and time the project was last updated.
+     * @var string Date and time the project was last updated.
      */
     public $updated_at;
 
@@ -174,7 +174,7 @@ class HarvestProject extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [[

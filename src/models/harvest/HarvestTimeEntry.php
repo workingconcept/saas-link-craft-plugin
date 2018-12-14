@@ -21,12 +21,12 @@ class HarvestTimeEntry extends Model
     // =========================================================================
 
     /**
-     * @var integer Unique ID for the time entry.
+     * @var int Unique ID for the time entry.
      */
     public $id;
 
     /**
-     * @var date Date of the time entry.
+     * @var string Date of the time entry.
      */
     public $spent_date;
 
@@ -71,7 +71,7 @@ class HarvestTimeEntry extends Model
     private $_invoice;
 
     /**
-     * @var decimal Number of (decimal time) hours tracked in this time entry.
+     * @var float Number of (decimal time) hours tracked in this time entry.
      */
     public $hours;
 
@@ -81,7 +81,7 @@ class HarvestTimeEntry extends Model
     public $notes;
 
     /**
-     * @var boolean Whether or not the time entry has been locked.
+     * @var bool Whether or not the time entry has been locked.
      */
     public $is_locked;
 
@@ -91,62 +91,62 @@ class HarvestTimeEntry extends Model
     public $locked_reason;
 
     /**
-     * @var boolean Whether or not the time entry has been approved via Timesheet Approval.
+     * @var bool Whether or not the time entry has been approved via Timesheet Approval.
      */
     public $is_closed;
 
     /**
-     * @var boolean Whether or not the time entry has been marked as invoiced.
+     * @var bool Whether or not the time entry has been marked as invoiced.
      */
     public $is_billed;
 
     /**
-     * @var datetime Date and time the timer was started (if tracking by duration). Use the ISO 8601 Format.
+     * @var string Date and time the timer was started (if tracking by duration). Use the ISO 8601 Format.
      */
     public $timer_started_at;
 
     /**
-     * @var time Time the time entry was started (if tracking by start/end times).
+     * @var string Time the time entry was started (if tracking by start/end times).
      */
     public $started_time;
 
     /**
-     * @var time Time the time entry was ended (if tracking by start/end times).
+     * @var string Time the time entry was ended (if tracking by start/end times).
      */
     public $ended_time;
 
     /**
-     * @var boolean Whether or not the time entry is currently running.
+     * @var bool Whether or not the time entry is currently running.
      */
     public $is_running;
 
     /**
-     * @var boolean Whether or not the time entry is billable.
+     * @var bool Whether or not the time entry is billable.
      */
     public $billable;
 
     /**
-     * @var boolean Whether or not the time entry counts towards the project budget.
+     * @var bool Whether or not the time entry counts towards the project budget.
      */
     public $budgeted;
 
     /**
-     * @var decimal The billable rate for the time entry.
+     * @var float The billable rate for the time entry.
      */
     public $billable_rate;
 
     /**
-     * @var decimal The cost rate for the time entry.
+     * @var float The cost rate for the time entry.
      */
     public $cost_rate;
 
     /**
-     * @var datetime Date and time the time entry was created. Use the ISO 8601 Format.
+     * @var string Date and time the time entry was created. Use the ISO 8601 Format.
      */
     public $created_at;
 
     /**
-     * @var datetime Date and time the time entry was last updated. Use the ISO 8601 Format.
+     * @var string Date and time the time entry was last updated. Use the ISO 8601 Format.
      */
     public $updated_at;
 

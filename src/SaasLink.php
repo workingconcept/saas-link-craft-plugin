@@ -120,7 +120,7 @@ class SaasLink extends craft\base\Plugin
     {
         $enabled = [];
 
-        foreach ($this->settings->enabledServices as $service)
+        foreach ($this->getSettings()->enabledServices as $service)
         {
             $instance = new $service;
 
