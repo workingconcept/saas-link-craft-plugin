@@ -162,7 +162,7 @@ class HarvestInvoice extends Model
     public $paid_at;
 
     /**
-     * @var date Date the invoice was paid.
+     * @var string Date the invoice was paid.
      */
     public $paid_date;
 

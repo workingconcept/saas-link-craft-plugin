@@ -152,15 +152,15 @@ class SaasLink extends craft\base\Plugin
             }
         }
 
-        $this->settings->enabledServices = $enabled;
+        $this->getSettings()->enabledServices = $enabled;
 
-        if ($this->capsule->isConfigured() && empty($this->settings->capsuleBaseUrl))
+        if ($this->capsule->isConfigured() && empty($this->getSettings()->capsuleBaseUrl))
         {
             // have the service update the URL so we can save it
             $this->capsule->setCapsuleBaseUrlSetting();
         }
 
-        if ($this->harvest->isConfigured() && empty($this->settings->harvestBaseUrl))
+        if ($this->harvest->isConfigured() && empty($this->getSettings()->harvestBaseUrl))
         {
             // have the service update the URL so we can save it
             $this->harvest->setHarvestBaseUrlSetting();

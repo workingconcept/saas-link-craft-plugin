@@ -157,7 +157,7 @@ class HarvestProject extends Model
     /**
      * Sets the project's client.
      *
-     * @param stdClass|HarvestClient $client Project client.
+     * @param \stdClass|HarvestClient $client Project client.
      *
      * @return HarvestClient
      */

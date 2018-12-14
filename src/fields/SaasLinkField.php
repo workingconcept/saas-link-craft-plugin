@@ -142,7 +142,7 @@ class SaasLinkField extends BaseOptionsField
     /**
      * Get a convenient URL for the selected record to show next to the selection.
      *
-     * @param string $value Stored field value.
+     * @param mixed $value Stored field value.
      *
      * @return string|null
      */
