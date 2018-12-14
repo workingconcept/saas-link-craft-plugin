@@ -21,7 +21,7 @@ class HarvestInvoice extends Model
     // =========================================================================
 
     /**
-     * @var integer Unique ID for the expense.
+     * @var int Unique ID for the expense.
      */
     public $id;
 
@@ -67,42 +67,42 @@ class HarvestInvoice extends Model
     public $purchase_order;
 
     /**
-     * @var decimal The total amount for the invoice, including any discounts and taxes.
+     * @var float The total amount for the invoice, including any discounts and taxes.
      */
     public $amount;
 
     /**
-     * @var decimal The total amount due at this time for this invoice.
+     * @var float The total amount due at this time for this invoice.
      */
     public $due_amount;
 
     /**
-     * @var decimal This percentage is applied to the subtotal, including line items and discounts.
+     * @var float This percentage is applied to the subtotal, including line items and discounts.
      */
     public $tax;
 
     /**
-     * @var decimal The first amount of tax included, calculated from tax. If no tax is defined, this value will be null.
+     * @var float The first amount of tax included, calculated from tax. If no tax is defined, this value will be null.
      */
     public $tax_amount;
 
     /**
-     * @var decimal This percentage is applied to the subtotal, including line items and discounts.
+     * @var float This percentage is applied to the subtotal, including line items and discounts.
      */
     public $tax2;
 
     /**
-     * @var decimal The amount calculated from tax2.
+     * @var float The amount calculated from tax2.
      */
     public $tax2_amount;
 
     /**
-     * @var decimal This percentage is subtracted from the subtotal.
+     * @var float This percentage is subtracted from the subtotal.
      */
     public $discount;
 
     /**
-     * @var decimal The amount calcuated from discount.
+     * @var float The amount calcuated from discount.
      */
     public $discount_amount;
 
@@ -127,22 +127,22 @@ class HarvestInvoice extends Model
     public $state;
 
     /**
-     * @var date Start of the period during which time entries were added to this invoice.
+     * @var string Start of the period during which time entries were added to this invoice.
      */
     public $period_start;
 
     /**
-     * @var date End of the period during which time entries were added to this invoice.
+     * @var string End of the period during which time entries were added to this invoice.
      */
     public $period_end;
 
     /**
-     * @var date Date the invoice was issued.
+     * @var string Date the invoice was issued.
      */
     public $issue_date;
 
     /**
-     * @var date Date the invoice is due.
+     * @var string Date the invoice is due.
      */
     public $due_date;
 
@@ -152,12 +152,12 @@ class HarvestInvoice extends Model
     public $payment_term;
 
     /**
-     * @var datetime Date and time the invoice was sent.
+     * @var string Date and time the invoice was sent.
      */
     public $sent_at;
 
     /**
-     * @var datetime Date and time the invoice was paid.
+     * @var string Date and time the invoice was paid.
      */
     public $paid_at;
 
@@ -167,17 +167,17 @@ class HarvestInvoice extends Model
     public $paid_date;
 
     /**
-     * @var datetime Date and time the invoice was closed.
+     * @var string Date and time the invoice was closed.
      */
     public $closed_at;
 
     /**
-     * @var datetime Date and time the invoice was created.
+     * @var string Date and time the invoice was created.
      */
     public $created_at;
 
     /**
-     * @var datetime Date and time the invoice was last updated.
+     * @var string Date and time the invoice was last updated.
      */
     public $updated_at;
 
