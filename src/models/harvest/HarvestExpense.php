@@ -16,14 +16,13 @@ use craft\base\Model;
  *
  * Note that there are some write-only fields here, and undocumented ones that come with a standard model via GET.
  */
-
 class HarvestExpense extends Model
 {
     // Properties
     // =========================================================================
 
     /**
-     * @var integer Unique ID for the expense.
+     * @var int Unique ID for the expense.
      */
     public $id;
 
@@ -70,7 +69,7 @@ class HarvestExpense extends Model
     /**
      * @var string A receipt file to attach to the expense. If including a receipt, you must submit a multipart/form-data request. (write only)
      */
-    public $recipt;
+    public $receipt;
 
     /**
      * @var object Once the expense has been invoiced, this field will include the associated invoice’s id and number.
@@ -83,12 +82,12 @@ class HarvestExpense extends Model
     public $notes;
 
     /**
-     * @var decimal The total amount of the expense.
+     * @var float The total amount of the expense.
      */
     public $total_cost;
 
     /**
-     * @var integer The quantity of units to use in calculating the total_cost of the expense.
+     * @var int The quantity of units to use in calculating the total_cost of the expense.
      */
     public $units;
 
@@ -123,17 +122,17 @@ class HarvestExpense extends Model
     public $delete_receipt;
 
     /**
-     * @var date Date the expense occurred.
+     * @var string Date the expense occurred.
      */
     public $spent_date;
 
     /**
-     * @var datetime Date and time the expense was created.
+     * @var string Date and time the expense was created.
      */
     public $created_at;
 
     /**
-     * @var datetime Date and time the expense was last updated.
+     * @var string Date and time the expense was last updated.
      */
     public $updated_at;
 
