@@ -46,12 +46,14 @@ class HarvestClient extends Model
     public $currency;
 
     /**
-     * @var datetime Date and time the client was created.
+     * @var string Date and time the client was created.
+     * TODO: convert to actual \DateTime
      */
     public $created_at;
 
     /**
-     * @var datetime Date and time the client was last updated.
+     * @var string Date and time the client was last updated.
+     * TODO: convert to actual \DateTime
      */
     public $updated_at;
 
