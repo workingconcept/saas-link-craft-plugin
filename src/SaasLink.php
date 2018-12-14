@@ -27,15 +27,15 @@ use craft\events\RegisterComponentTypesEvent;
 use yii\base\Event;
 
 /**
- * Class SaaS Link
+ * Class SaasLink
  *
  * @author    Working Concept
  * @package   SaaS Link
  * @since     1.0.0
  *
- * @property  HarvestService $harvestService
- * @property  TrelloService  $trelloService
- * @property  CapsuleService $capsuleService
+ * @property  HarvestService $harvest
+ * @property  TrelloService  $trello
+ * @property  CapsuleService $capsule
  */
 class SaasLink extends craft\base\Plugin
 {
