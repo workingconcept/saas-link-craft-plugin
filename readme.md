@@ -4,7 +4,7 @@
 
 <h4 align="center">A Field Type for saving convenient links to stuff in <a href="https://capsulecrm.com/">Capsule</a>, <a href="https://www.getharvest.com/">Harvest</a>, and <a href="https://trello.com">Trello</a>.</h4>
 
-<p align="center"><a href="https://scrutinizer-ci.com/g/workingconcept/saas-link-craft-plugin/"><img src="https://scrutinizer-ci.com/g/workingconcept/saas-link-craft-plugin/badges/quality-score.png?b=master"></a></p>
+<p align="center"><a href="https://scrutinizer-ci.com/g/workingconcept/saas-link-craft-plugin/"><img src="https://scrutinizer-ci.com/g/workingconcept/saas-link-craft-plugin/badges/quality-score.png?b=master" alt="Scrutinizer status"></a></p>
 
 ## Field Settings
 

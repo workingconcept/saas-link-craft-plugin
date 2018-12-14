@@ -416,10 +416,11 @@ class HarvestService extends SaasLinkService
     /**
      * Get a user's logged hours within a range of dates.
      *
-     * @param int      $userId     Harvest user ID
-     * @param DateTime $startDate  beginning of date range
-     * @param DateTime $endDate    end of date range
-     * @param bool     $billable   whether to return billable or non-billable hours
+     * @param int       $userId     Harvest user ID
+     * @param \DateTime $startDate  beginning of date range
+     * @param \DateTime $endDate    end of date range
+     * @param bool      $billable   whether to return billable or non-billable hours
+     * @param bool      $roundTime  whether to round hours as they're added
      *
      * @return float
      */
