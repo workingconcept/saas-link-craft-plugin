@@ -1,5 +1,9 @@
 # Saas Link Changelog
 
+## 1.0.2 - 2019-01-21
+### Fixed
+- Fixed field validation error.
+
 ## 1.0.1 - 2018-12-11
 ### Changed
 - Fixed performance issues caused by too much API interaction.

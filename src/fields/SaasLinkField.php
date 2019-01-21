@@ -25,6 +25,7 @@ class SaasLinkField extends BaseOptionsField
 
     private $defaultService;
 
+
     // Static Methods
     // =========================================================================
 
@@ -43,7 +44,7 @@ class SaasLinkField extends BaseOptionsField
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['service', 'relationshipType'], 'string'],
@@ -97,17 +98,41 @@ class SaasLinkField extends BaseOptionsField
     }
 
     /**
+     * Get options from the relevant service based on field settings.
      * @return array
      */
-    public function fetchOptions()
+    public function getOptions(): array
     {
-        if ($serviceInstance = $this->getServiceInstance())
+        if (empty($this->options))
         {
-            return $serviceInstance->getOptions($this->relationshipType);
+            if ($serviceInstance = $this->getServiceInstance())
+            {
+                $this->options = $serviceInstance->getOptions($this->relationshipType);
+            }
         }
 
-        return [];
+        return $this->options;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getElementValidationRules(): array
+    {
+        // Get all of the acceptable values
+        $range = [];
+
+        if ($options = $this->getOptions()) {
+            foreach ($options as $option) {
+                $range[] = $option['value'];
+            }
+        }
+
+        return [
+            ['in', 'range' => $range, 'allowArray' => false],
+        ];
+    }
+
 
     /**
      * @inheritdoc
@@ -120,7 +145,7 @@ class SaasLinkField extends BaseOptionsField
             $value = $this->defaultValue();
         }
 
-        $options = $this->fetchOptions();
+        $options = $this->getOptions();
 
         // add an empty first item
         array_unshift($options, [
@@ -128,7 +153,8 @@ class SaasLinkField extends BaseOptionsField
                 'value'   => '',
                 'link'    => null,
                 'default' => null,
-        ]);
+            ]
+        );
 
         return Craft::$app->getView()->renderTemplate('saas-link/select',
             [
@@ -136,7 +162,8 @@ class SaasLinkField extends BaseOptionsField
                 'value'      => $value,
                 'optionLink' => $this->getLinkFromValue($value),
                 'options'    => $options,
-            ]);
+            ]
+        );
     }
 
     /**
@@ -152,7 +179,7 @@ class SaasLinkField extends BaseOptionsField
         {
             $compareValue = $value->value ?? $value;
 
-            foreach	($this->options as $option)
+            foreach	($this->getOptions() as $option)
             {
                 if ($option['value'] === $compareValue)
                 {
