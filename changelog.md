@@ -10,6 +10,7 @@
 - Improved plugin settings so one needn't embark on a bewildering journey to find his or her Trello Organization ID. (It's a dropdown now.)
 - Added plugin settings field instructions.
 - Tidied up a bit, added type hints, etc.
+
 ### Removed
 - Got rid of half-baked translations before anybody noticed.
 
