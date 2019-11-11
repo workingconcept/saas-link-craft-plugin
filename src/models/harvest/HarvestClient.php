@@ -57,6 +57,11 @@ class HarvestClient extends Model
      */
     public $updated_at;
 
+    /**
+     * @var string
+     */
+    public $statement_key;
+
 
     // Public Methods
     // =========================================================================
