@@ -1,5 +1,10 @@
 # Saas Link Changelog
 
+## 1.0.3 - 2019-11-10
+### Fixed
+- Added `HarvestClient::statement_key` to fix REST → model error.
+- Made the icon slightly less awful.
+
 ## 1.0.2 - 2019-01-21
 ### Fixed
 - Fixed field validation error.
