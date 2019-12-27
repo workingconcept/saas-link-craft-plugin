@@ -43,6 +43,7 @@ Why Capsule, Harvest and Trello? That's just what we've used. Submit an issue or
 - [ ] make it easy for developers to add custom services
 - [ ] add and document template variables
 - [ ] make plugin settings more civilized and validate carefully
+- [ ] add sort option for each field setting
 
 ---
 
