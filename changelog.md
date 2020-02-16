@@ -1,6 +1,6 @@
 # Saas Link Changelog
 
-## 1.0.4 - Unreleased
+## 1.0.4 - 2020-02-16
 ### Fixed
 - Fixed bug in `HarvestService::getProject()`.
 - Added support for new `TrelloOrganization` attributes to prevent API errors.
