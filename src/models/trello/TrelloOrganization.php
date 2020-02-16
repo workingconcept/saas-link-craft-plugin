@@ -58,6 +58,16 @@ class TrelloOrganization extends Model
     /**
      * @var
      */
+    public $idMemberCreator;
+
+    /**
+     * @var
+     */
+    public $ixUpdate;
+
+    /**
+     * @var
+     */
     public $invited;
 
     /**
@@ -144,4 +154,15 @@ class TrelloOrganization extends Model
      * @var
      */
     public $maximumLicenseCount;
+
+    /**
+     * @var
+     */
+    public $allAdminsEnabled;
+
+    /**
+     * @var
+     */
+    public $teamType;
+
 }

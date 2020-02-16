@@ -3,6 +3,7 @@
 ## 1.0.4 - Unreleased
 ### Fixed
 - Fixed bug in `HarvestService::getProject()`.
+- Added support for new `TrelloOrganization` attributes to prevent API errors.
 
 ## 1.0.3 - 2019-11-10
 ### Fixed
