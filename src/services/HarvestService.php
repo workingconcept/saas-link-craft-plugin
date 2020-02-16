@@ -247,7 +247,7 @@ class HarvestService extends SaasLinkService
         {
             $response     = $this->client->get('projects/' . $projectId);
             $responseData = json_decode($response->getBody(), true);
-            $project      = new HarvestProject($responseData->project);
+            $project      = new HarvestProject($responseData);
 
             $this->project = $project;
         }

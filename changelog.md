@@ -1,5 +1,9 @@
 # Saas Link Changelog
 
+## 1.0.4 - Unreleased
+### Fixed
+- Fixed bug in `HarvestService::getProject()`.
+
 ## 1.0.3 - 2019-11-10
 ### Fixed
 - Added `HarvestClient::statement_key` to fix REST → model error.

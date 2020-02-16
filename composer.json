@@ -2,7 +2,7 @@
     "name": "workingconcept/saas-link",
     "description": "Simple Craft Field Type to link Entries to records in Harvest, Capsule and Trello.",
     "type": "craft-plugin",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "keywords": [
         "craft",
         "cms",
