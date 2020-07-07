@@ -6,6 +6,8 @@
 
 <p align="center"><a href="https://scrutinizer-ci.com/g/workingconcept/saas-link-craft-plugin/"><img src="https://scrutinizer-ci.com/g/workingconcept/saas-link-craft-plugin/badges/quality-score.png?b=master" alt="Scrutinizer status"></a></p>
 
+**This plugin is no longer maintained.**
+
 ## Field Settings
 
 ![SaaS Link field settings.](resources/field-settings.png)
